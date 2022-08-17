@@ -1,0 +1,205 @@
+html, body, main {
+  margin: 0;
+  min-height: 100vh;
+  width: 100vw;
+  font-family: Arial, sans-serif;
+
+  * {
+    box-sizing: border-box;
+  }
+}
+
+figure {
+  margin: 0;
+
+  img {
+    width: 100%;
+  }
+}
+
+label {
+  font-size: 0.8rem;
+  font-weight: bold;
+}
+
+button {
+  background-color: dodgerblue;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  color: white;
+
+  &:hover {
+    background-color: darkblue;
+  }
+}
+
+input {
+  padding: 0.5rem;
+  border: 1px solid #bbb;
+  border-radius: 4px;
+}
+
+hr {
+  border: 1px solid #bbb;
+}
+
+.container {
+  margin: auto;
+  max-width: 1024px;
+  width: 100%;
+}
+
+.box {
+  background-color: white;
+  border-radius: 4px;
+  box-shadow: 0 2px 2px #888888;
+  padding: 2rem;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.flex {
+  display: flex;
+}
+
+.inline-flex {
+  display: inline-flex;
+}
+
+.flex-row {
+  flex-direction: row;
+}
+
+.flex-column {
+  flex-direction: column;
+}
+
+.flex-row-reverse {
+  flex-direction: row-reverse;
+}
+
+.flex-column-reverse {
+  flex-direction: column-reverse;
+}
+
+.flex-wrap {
+  flex-wrap: wrap;
+}
+
+.flex-nowrap {
+  flex-wrap: nowrap;
+}
+
+.flex-wrap-reverse {
+  flex-wrap: wrap-reverse;
+}
+
+.flex-grow-0 {
+  flex-grow: 0;
+}
+
+.flex-grow-1 {
+  flex-grow: 1;
+}
+
+.justify-content-start {
+  justify-content: flex-start;
+}
+
+.justify-content-end {
+  justify-content: flex-end;
+}
+
+.justify-content-center {
+  justify-content: center;
+}
+
+.justify-content-between {
+  justify-content: space-between;
+}
+
+.justify-content-around {
+  justify-content: space-around;
+}
+
+.align-items-start {
+  align-items: flex-start;
+}
+
+.align-items-end {
+  align-items: flex-end;
+}
+
+.align-items-center {
+  align-items: center;
+}
+
+.align-items-baseline {
+  align-items: baseline;
+}
+
+$sizeUnit: rem;
+$marginKey: 'm';
+$paddingKey: 'p';
+$separator: '-';
+$sizes: (
+                ('none', 0),
+                ('xs', 0.25),
+                ('sm', 0.5),
+                ('md', 1),
+                ('lg', 2),
+                ('xl', 4),
+);
+$positions: (
+                ('t', 'top'),
+                ('r', 'right'),
+                ('b', 'bottom'),
+                ('l', 'left')
+);
+
+@function sizeValue($key, $value) {
+  @return if($key == 'none', 0, $value + $sizeUnit);
+}
+
+@each $size in $sizes {
+  $sizeKey: nth($size, 1);
+  $sizeValue: nth($size, 2);
+  .#{$marginKey}#{$separator}#{$sizeKey} {
+    margin: sizeValue($sizeKey, $sizeValue);
+  }
+  #{$paddingKey}#{$separator}#{$sizeKey} {
+    padding: sizeValue($sizeKey, $sizeValue);
+  }
+  #{$paddingKey}#{$separator}y#{$separator}#{$sizeKey} {
+    padding-top: sizeValue($sizeKey, $sizeValue);
+    padding-bottom: sizeValue($sizeKey, $sizeValue);
+  }
+  .#{$paddingKey}#{$separator}x#{$separator}#{$sizeKey} {
+    padding-left: sizeValue($sizeKey, $sizeValue);
+    padding-right: sizeValue($sizeKey, $sizeValue);
+  }
+  .#{$marginKey}#{$separator}x#{$separator}#{$sizeKey} {
+    margin-left: sizeValue($sizeKey, $sizeValue);
+    margin-right: sizeValue($sizeKey, $sizeValue);
+  }
+  .#{$marginKey}#{$separator}y#{$separator}#{$sizeKey} {
+    margin-top: sizeValue($sizeKey, $sizeValue);
+    margin-bottom: sizeValue($sizeKey, $sizeValue);
+  }
+  @each $position in $positions {
+    $posKey: nth($position, 1);
+    $posValue: nth($position, 2);
+    .#{$marginKey}#{$separator}#{$posKey}#{$separator}#{$sizeKey} {
+      margin-#{$posValue}: sizeValue($sizeKey, $sizeValue);
+    }
+    #{$paddingKey}#{$separator}#{$posKey}#{$separator}#{$sizeKey} {
+      padding-#{$posValue}: sizeValue($sizeKey, $sizeValue);
+    }
+  }
+}

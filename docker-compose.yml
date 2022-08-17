@@ -1,0 +1,56 @@
+version: "3.8"
+
+services:
+
+  database:
+    image: mysql:5.7
+    container_name: database
+    volumes:
+      - mysqldb:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=insecure
+      - MYSQL_DATABASE=qatest
+      - MYSQL_USER=qatester
+      - MYSQL_PASSWORD=insecure
+
+  backend:
+    build:
+      args:
+        user: www
+        # set to your local uid to avoid file permission errors
+        uid: 1000
+      context: ./backend
+      dockerfile: ./docker/app/Dockerfile
+    container_name: backend
+    volumes:
+      - ./backend:/var/www/html
+    working_dir: /var/www/html
+    depends_on:
+      - database
+    expose:
+      - 9000
+
+  webserver:
+    image: nginx:1.19-alpine
+    container_name: webserver
+    volumes:
+      - ./backend:/var/www/html
+      - ./backend/docker/webserver:/etc/nginx/conf.d
+    depends_on:
+      - backend
+    ports:
+      - 8000:80
+
+  frontend:
+    image: node:14.13
+    container_name: frontend
+    volumes:
+      - ./frontend:/var/www/html
+    working_dir: /var/www/html
+    ports:
+      - 8080:8080
+    command: npm run serve
+
+volumes:
+  mysqldb:
+    driver: local
